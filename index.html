@@ -99,7 +99,6 @@
             font-weight: 700;
         }
 
-        /* Specific Colors */
         .card-amira .avatar { background: linear-gradient(135deg, #868CFF 0%, #4318FF 100%); }
         .card-hagar .avatar { background: linear-gradient(135deg, #FFC56C 0%, #FF9800 100%); }
         .card-ebtehal .avatar { background: linear-gradient(135deg, #05CD99 0%, #01B574 100%); }
@@ -115,6 +114,7 @@
             padding: 15px;
             border-radius: 12px;
             border: 1px solid #edf2f7;
+            position: relative;
         }
 
         .skill-top {
@@ -193,6 +193,11 @@
             color: white;
             cursor: pointer;
         }
+
+        .delete-btn {
+            background: #e53e3e !important;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +209,7 @@
 
     <div class="dashboard-grid">
 
+        <!-- Amira -->
         <div class="person-card card-amira">
             <div class="card-header">
                 <div class="person-info">
@@ -211,67 +217,11 @@
                     <div class="person-name">أميرة (Amira)</div>
                 </div>
             </div>
-
-            <div class="skills-list" id="amira-skills">
-                <div class="skill-item">
-                    <div class="skill-top">
-                        <span class="skill-title">🌐 English</span>
-                        <span class="skill-percentage" id="val-amira-1">20%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="bar-amira-1" style="width: 20%;"></div>
-                    </div>
-                    <div class="controls">
-                        <input type="number" min="0" max="100" value="20" id="input-amira-1">
-                        <button onclick="updateProgress('amira-1')">تحديث</button>
-                    </div>
-                </div>
-
-                <div class="skill-item">
-                    <div class="skill-top">
-                        <span class="skill-title">🐍 Python</span>
-                        <span class="skill-percentage" id="val-amira-2">15%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="bar-amira-2" style="width: 15%;"></div>
-                    </div>
-                    <div class="controls">
-                        <input type="number" min="0" max="100" value="15" id="input-amira-2">
-                        <button onclick="updateProgress('amira-2')">تحديث</button>
-                    </div>
-                </div>
-
-                <div class="skill-item">
-                    <div class="skill-top">
-                        <span class="skill-title">💻 Bash Script</span>
-                        <span class="skill-percentage" id="val-amira-3">70%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="bar-amira-3" style="width: 70%;"></div>
-                    </div>
-                    <div class="controls">
-                        <input type="number" min="0" max="100" value="70" id="input-amira-3">
-                        <button onclick="updateProgress('amira-3')">تحديث</button>
-                    </div>
-                </div>
-
-                <div class="skill-item">
-                    <div class="skill-top">
-                        <span class="skill-title">☁️ Azure</span>
-                        <span class="skill-percentage" id="val-amira-4">40%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="bar-amira-4" style="width: 40%;"></div>
-                    </div>
-                    <div class="controls">
-                        <input type="number" min="0" max="100" value="40" id="input-amira-4">
-                        <button onclick="updateProgress('amira-4')">تحديث</button>
-                    </div>
-                </div>
-            </div>
-            <button class="add-skill-btn" onclick="addNewSkill('amira-skills')">+ إضافة مادة / هدف جديد</button>
+            <div class="skills-list" id="amira"></div>
+            <button class="add-skill-btn" onclick="addNewSkill('amira')">+ إضافة مادة / هدف جديد</button>
         </div>
 
+        <!-- Hagar -->
         <div class="person-card card-hagar">
             <div class="card-header">
                 <div class="person-info">
@@ -279,25 +229,11 @@
                     <div class="person-name">هاجر (Hagar)</div>
                 </div>
             </div>
-
-            <div class="skills-list" id="hagar-skills">
-                <div class="skill-item">
-                    <div class="skill-top">
-                        <span class="skill-title">🌐 English</span>
-                        <span class="skill-percentage" id="val-hagar-1">0%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="bar-hagar-1" style="width: 0%;"></div>
-                    </div>
-                    <div class="controls">
-                        <input type="number" min="0" max="100" value="0" id="input-hagar-1">
-                        <button onclick="updateProgress('hagar-1')">تحديث</button>
-                    </div>
-                </div>
-            </div>
-            <button class="add-skill-btn" onclick="addNewSkill('hagar-skills')">+ إضافة مادة / هدف جديد</button>
+            <div class="skills-list" id="hagar"></div>
+            <button class="add-skill-btn" onclick="addNewSkill('hagar')">+ إضافة مادة / هدف جديد</button>
         </div>
 
+        <!-- Ebtehal -->
         <div class="person-card card-ebtehal">
             <div class="card-header">
                 <div class="person-info">
@@ -305,65 +241,104 @@
                     <div class="person-name">ابتهال (Ebtehal)</div>
                 </div>
             </div>
-
-            <div class="skills-list" id="ebtehal-skills">
-                <div class="skill-item">
-                    <div class="skill-top">
-                        <span class="skill-title">🌐 English</span>
-                        <span class="skill-percentage" id="val-ebtehal-1">0%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="bar-ebtehal-1" style="width: 0%;"></div>
-                    </div>
-                    <div class="controls">
-                        <input type="number" min="0" max="100" value="0" id="input-ebtehal-1">
-                        <button onclick="updateProgress('ebtehal-1')">تحديث</button>
-                    </div>
-                </div>
-            </div>
-            <button class="add-skill-btn" onclick="addNewSkill('ebtehal-skills')">+ إضافة مادة / هدف جديد</button>
+            <div class="skills-list" id="ebtehal"></div>
+            <button class="add-skill-btn" onclick="addNewSkill('ebtehal')">+ إضافة مادة / هدف جديد</button>
         </div>
 
     </div>
 
     <script>
-        function updateProgress(id) {
-            const input = document.getElementById(`input-${id}`);
+        const initialData = {
+            amira: [
+                { id: 'amira-1', title: '🌐 English', progress: 20 },
+                { id: 'amira-2', title: '🐍 Python', progress: 15 },
+                { id: 'amira-3', title: '💻 Bash Script', progress: 70 },
+                { id: 'amira-4', title: '☁️ Azure', progress: 40 }
+            ],
+            hagar: [
+                { id: 'hagar-1', title: '🌐 English', progress: 0 }
+            ],
+            ebtehal: [
+                { id: 'ebtehal-1', title: '🌐 English', progress: 0 }
+            ]
+        };
+
+        function getData() {
+            const saved = localStorage.getItem('our_goals_data');
+            return saved ? JSON.parse(saved) : initialData;
+        }
+
+        function saveData(data) {
+            localStorage.setItem('our_goals_data', JSON.stringify(data));
+        }
+
+        function render() {
+            const data = getData();
+            ['amira', 'hagar', 'ebtehal'].forEach(person => {
+                const container = document.getElementById(person);
+                container.innerHTML = '';
+                
+                data[person].forEach((item, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'skill-item';
+                    el.innerHTML = `
+                        <div class="skill-top">
+                            <span class="skill-title">${item.title}</span>
+                            <span class="skill-percentage">${item.progress}%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: ${item.progress}%;"></div>
+                        </div>
+                        <div class="controls">
+                            <input type="number" min="0" max="100" value="${item.progress}" id="input-${person}-${index}">
+                            <button onclick="updateProgress('${person}', ${index})">تحديث</button>
+                            <button class="delete-btn" onclick="deleteSkill('${person}', ${index})">حذف</button>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+            });
+        }
+
+        function updateProgress(person, index) {
+            const data = getData();
+            const input = document.getElementById(`input-${person}-${index}`);
             let val = parseInt(input.value) || 0;
             if (val < 0) val = 0;
             if (val > 100) val = 100;
             
-            input.value = val;
-            document.getElementById(`val-${id}`).innerText = val + '%';
-            document.getElementById(`bar-${id}`).style.width = val + '%';
+            data[person][index].progress = val;
+            saveData(data);
+            render();
         }
 
-        let counter = 100;
-        function addNewSkill(containerId) {
+        function addNewSkill(person) {
             const title = prompt("أدخل اسم المادة أو الهدف الجديد:");
             if (!title) return;
-            
-            const initialVal = prompt("أدخل نسبة التقدم الحالية (0-100):", "0") || "0";
-            const id = `custom-${counter++}`;
+            const progress = parseInt(prompt("أدخل نسبة التقدم الحالية (0-100):", "0")) || 0;
 
-            const container = document.getElementById(containerId);
-            const newItem = document.createElement('div');
-            newItem.className = 'skill-item';
-            newItem.innerHTML = `
-                <div class="skill-top">
-                    <span class="skill-title">📌 ${title}</span>
-                    <span class="skill-percentage" id="val-${id}">${initialVal}%</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="bar-${id}" style="width: ${initialVal}%;"></div>
-                </div>
-                <div class="controls">
-                    <input type="number" min="0" max="100" value="${initialVal}" id="input-${id}">
-                    <button onclick="updateProgress('${id}')">تحديث</button>
-                </div>
-            `;
-            container.appendChild(newItem);
+            const data = getData();
+            data[person].push({
+                id: `${person}-${Date.now()}`,
+                title: `📌 ${title}`,
+                progress: progress > 100 ? 100 : (progress < 0 ? 0 : progress)
+            });
+            
+            saveData(data);
+            render();
         }
+
+        function deleteSkill(person, index) {
+            if (confirm("هل انت متأكد من حذف هذه المادة؟")) {
+                const data = getData();
+                data[person].splice(index, 1);
+                saveData(data);
+                render();
+            }
+        }
+
+        // Initial Load
+        render();
     </script>
 </body>
 </html>
