@@ -198,6 +198,15 @@
             background: #e53e3e !important;
             margin-right: auto;
         }
+
+        .status-badge {
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: -25px;
+            margin-bottom: 25px;
+            color: #01b574;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -206,6 +215,7 @@
         <h1>📊 لوحة متابعة الأهداف والتقدم (Our Goals)</h1>
         <p>متابعة التطور والمهارات لكل من أميرة، هاجر، وابتهال</p>
     </div>
+    <div class="status-badge" id="status">🔄 جاري الاتصال بقاعدة البيانات...</div>
 
     <div class="dashboard-grid">
 
@@ -247,7 +257,21 @@
 
     </div>
 
+    <!-- Firebase Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <script>
+        // إعدادات التوصيل بقاعدة البيانات السحابية الحية
+        const firebaseConfig = {
+            databaseURL: "https://our-goals-tracker-default-rtdb.firebaseio.com/"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
         const initialData = {
             amira: [
                 { id: 'amira-1', title: '🌐 English', progress: 20 },
@@ -263,22 +287,29 @@
             ]
         };
 
-        function getData() {
-            const saved = localStorage.getItem('our_goals_data');
-            return saved ? JSON.parse(saved) : initialData;
-        }
+        let currentData = {};
 
-        function saveData(data) {
-            localStorage.setItem('our_goals_data', JSON.stringify(data));
-        }
+        // الاستماع للتغييرات الحية من السيرفر
+        db.ref('goals').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (!data) {
+                // إذا كانت المرة الأولى، يتم كتابة البيانات الافتراضية
+                db.ref('goals').set(initialData);
+                currentData = initialData;
+            } else {
+                currentData = data;
+            }
+            document.getElementById('status').innerText = '🟢 متصل ومحفوظ سحابياً لحظة بلحظة';
+            render();
+        });
 
         function render() {
-            const data = getData();
             ['amira', 'hagar', 'ebtehal'].forEach(person => {
                 const container = document.getElementById(person);
                 container.innerHTML = '';
                 
-                data[person].forEach((item, index) => {
+                const items = currentData[person] || [];
+                items.forEach((item, index) => {
                     const el = document.createElement('div');
                     el.className = 'skill-item';
                     el.innerHTML = `
@@ -301,15 +332,13 @@
         }
 
         function updateProgress(person, index) {
-            const data = getData();
             const input = document.getElementById(`input-${person}-${index}`);
             let val = parseInt(input.value) || 0;
             if (val < 0) val = 0;
             if (val > 100) val = 100;
             
-            data[person][index].progress = val;
-            saveData(data);
-            render();
+            currentData[person][index].progress = val;
+            db.ref('goals').set(currentData);
         }
 
         function addNewSkill(person) {
@@ -317,28 +346,22 @@
             if (!title) return;
             const progress = parseInt(prompt("أدخل نسبة التقدم الحالية (0-100):", "0")) || 0;
 
-            const data = getData();
-            data[person].push({
+            if (!currentData[person]) currentData[person] = [];
+            currentData[person].push({
                 id: `${person}-${Date.now()}`,
                 title: `📌 ${title}`,
                 progress: progress > 100 ? 100 : (progress < 0 ? 0 : progress)
             });
             
-            saveData(data);
-            render();
+            db.ref('goals').set(currentData);
         }
 
         function deleteSkill(person, index) {
-            if (confirm("هل انت متأكد من حذف هذه المادة؟")) {
-                const data = getData();
-                data[person].splice(index, 1);
-                saveData(data);
-                render();
+            if (confirm("هل أنت متأكد من حذف هذه المادة؟")) {
+                currentData[person].splice(index, 1);
+                db.ref('goals').set(currentData);
             }
         }
-
-        // Initial Load
-        render();
     </script>
 </body>
 </html>
